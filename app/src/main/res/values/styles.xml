@@ -1,0 +1,55 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- 页面顶部Toolbar样式 -->
+    <style name="toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">#108EE9</item>
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="ToolbarTextButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <!--测绘页面工具栏按钮样式-->
+    <style name="MeasureToolbarImageButton" parent="@style/Widget.AppCompat.ImageButton">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">3dp</item>
+    </style>
+
+    <style name="MeasureToolbarTextButton">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="MeasureTextButton" parent="Base.TextAppearance.AppCompat.Button">
+        <!--<style name="MeasureTextButton" parent="android:TextAppearance.Material.Button">-->
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="MeasureToolbarTextButton_disable">
+        <item name="android:textColor">#757575</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+</resources>

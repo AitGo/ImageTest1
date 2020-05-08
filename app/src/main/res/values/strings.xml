@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MyTest3</string>
+
+    <string name="activity_analyzelist_dialog_title">App将删除分析数据</string>
+    <string name="activity_analyzelist_dialog_message">确定要删除吗 ?</string>
+    <string name="activity_appalbum_imgpreview_dialog_title">App将删除图像文件</string>
+    <string name="create_filename">_分析结果[</string>
+    <string name="foot_len">足迹长度</string>
+    <string name="front_width">前掌宽</string>
+    <string name="middle_width">中腰宽</string>
+    <string name="heel_width">后跟宽</string>
+    <string name="hard_edge_len">实边长</string>
+    <string name="stress_len">重压面长</string>
+
+    <string name="btn_text_brightness">亮度</string>
+    <string name="btn_text_contrast">对比度</string>
+    <string name="btn_text_histogram">直方调节</string>
+
+    <!-- Adin: 图像处理 -->
+    <string name="btn_text_sharpening">锐化</string>
+    <string name="btn_text_gray">灰度</string>
+    <string name="btn_text_two_value">二值</string>
+    <string name="btn_text_edge">边缘</string>
+
+    <!-- Adin: 图形操作 -->
+    <string name="btn_text_rotate">90度旋转</string>
+    <string name="btn_text_mirror_h">水平翻转</string>
+    <string name="btn_text_mirror_v">垂直翻转</string>
+</resources>

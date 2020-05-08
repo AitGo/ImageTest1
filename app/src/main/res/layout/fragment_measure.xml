@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <com.liany.mytest3.image.widget.ComplexImageView
+            android:id="@+id/view_complex_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_dark_gray"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+        <ImageButton
+                android:src="@mipmap/ic_arrow_back_shadow"
+                android:id="@+id/btn_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/MeasureToolbarImageButton"/>
+        <ImageButton
+                android:src="@mipmap/ic_menu_shadow"
+                android:id="@+id/btn_toolbar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/MeasureToolbarImageButton"/>
+        <ImageButton
+                android:src="@mipmap/ic_eye"
+                android:id="@+id/btn_eye"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_toolbar"
+                style="@style/MeasureToolbarImageButton"
+                android:layout_marginEnd="10dp"/>
+    </android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#c8000000"
+            android:id="@+id/measure_toolbar">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_gravity="start"
+                android:gravity="center"
+                android:id="@+id/measure_toolbar_sub">
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:id="@+id/measure_toolbar_main">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
