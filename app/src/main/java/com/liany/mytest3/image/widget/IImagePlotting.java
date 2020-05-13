@@ -55,6 +55,11 @@ public interface IImagePlotting {
     void drawStressLengthLine();
 
     /**
+     * 绘制矩形框
+     */
+    void drawRectangle();
+
+    /**
      * 删除当前选中的测量线
      */
     void removeLine();

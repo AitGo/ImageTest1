@@ -21,6 +21,7 @@ import com.liany.mytest3.image.shape.FreeLineShape;
 import com.liany.mytest3.image.shape.IEventful;
 import com.liany.mytest3.image.shape.IPlottingSaveable;
 import com.liany.mytest3.image.shape.MeasureShape;
+import com.liany.mytest3.image.shape.RectangleShape;
 import com.liany.mytest3.image.shape.ScaleRuleShape;
 import com.liany.mytest3.image.shape.ShapeType;
 
@@ -49,6 +50,7 @@ public class PlottingImageView extends AbstractPlottingImageView implements IIma
 
     private HardEdgeMeasureShape mHardEdgeShape;      //实边长图形
     private StressMeasureShape mStressShape;      //重压线长图形
+    private RectangleShape mRectangle;      //截取框图形
 
     /*常量定义*/
     private final static int MODE_NONE = 0;    /* 无模式 */
@@ -308,6 +310,11 @@ public class PlottingImageView extends AbstractPlottingImageView implements IIma
                     mStressShape.destructuring(raw, mViewMatrix);
                     addShape(mStressShape);
                     break;
+                case PLOTTING_STRESS_rectangle:
+                    mRectangle = new Rectangle(ctx);
+                    mRectangle.destructuring(raw, mViewMatrix);
+                    addShape(mRectangle);
+                    break;
             }
         }
     }
@@ -415,6 +422,15 @@ public class PlottingImageView extends AbstractPlottingImageView implements IIma
         clearCurrentShape();
 
         drawingShape = new StressMeasureShape(getContext());
+        drawingShape.setShapeMatrix(mViewMatrix);
+    }
+
+    @Override
+    public void drawRectangle() {
+        this.setMode(MODE_DRAWABLE);
+        clearCurrentShape();
+
+        drawingShape = new Rectangle(getContext());
         drawingShape.setShapeMatrix(mViewMatrix);
     }
 
@@ -1098,4 +1114,66 @@ public class PlottingImageView extends AbstractPlottingImageView implements IIma
     }
     //</editor-fold>
 
+    class Rectangle extends RectangleShape {
+
+        public Rectangle(Context context) {
+            super(context);
+            setType(ShapeType.PLOTTING_STRESS_rectangle);
+        }
+
+        @Override
+        public void onDelete() {
+            mRectangle = null;
+        }
+
+        @Override
+        public void beforeDraw() {
+            removeShape(mRectangle);
+        }
+
+        @Override
+        public void onTransforming() {
+
+        }
+
+        @Override
+        public void afterDragDraw(DrawableShape shape) {
+//            super.afterDragDraw(shape);
+            if (plottingListener != null) {
+                plottingListener.afterPlotting();
+            }
+            if (shape.isInit()) {
+                mRectangle = (RectangleShape) shape;
+            }
+        }
+
+        @Override
+        public void onDoubleClick() {
+
+        }
+
+        @Override
+        public void onPressHandler(float x, float y) {
+
+        }
+
+        @Override
+        public void onLongPressHandler(float x, float y) {
+
+        }
+
+        @Override
+        public void onHandlerMove(float x, float y) {
+            mHandlerLongPressProgress = false;
+            mLongPressHandler.removeCallbacksAndMessages(null);
+            if (plottingListener != null) {
+                plottingListener.onControlPlottingHandlerMove(x, y, mViewMatrix, getPlottingStruct());
+            }
+        }
+
+        @Override
+        public float getPlottingScale() {
+            return mPlottingScalePixelLength / mPlottingScaleUnit;
+        }
+    }
 }

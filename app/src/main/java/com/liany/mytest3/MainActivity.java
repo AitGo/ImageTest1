@@ -1,15 +1,13 @@
 package com.liany.mytest3;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.liany.mytest3.image.AppAlbumImgPreviewActivity;
-import com.liany.mytest3.image.TestActivity;
+import com.liany.mytest3.image.ImageProcessActivity;
 import com.liany.mytest3.image.getPhotoFromPhotoAlbum;
 import com.liany.mytest3.polling.PollingService;
 import com.liany.mytest3.polling.PollingUtils;
@@ -40,14 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.button:
                 //Start polling service
-                LogUtils.e("Start polling service...");
-//                PollingUtils.startPollingService(this, 30, PollingService.class, PollingService.ACTION);
-                Intent i = new Intent(this, AlarmService.class);
-//                // 获取20秒之后的日期时间字符串
-                i.putExtra("alarm_time",
-                        DateTimeUtil.getNLaterDateTimeString(Calendar.SECOND, 20));
-                i.putExtra("task_id", mTaskId);
-                startService(i);
+//                LogUtils.e("Start polling service...");
+////                PollingUtils.startPollingService(this, 30, PollingService.class, PollingService.ACTION);
+//                Intent i = new Intent(this, AlarmService.class);
+////                // 获取20秒之后的日期时间字符串
+//                i.putExtra("alarm_time",
+//                        DateTimeUtil.getNLaterDateTimeString(Calendar.SECOND, 20));
+//                i.putExtra("task_id", mTaskId);
+//                startService(i);
                 goPhotoAlbum(123);
 //                AlarmManagerUtil.sendRepeatAlarmBroadcast(this,30,1,System.currentTimeMillis(),1000*3,MainActivity.class);
                 break;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (requestCode == 123) {//获取系统照片上传
                 String path = getPhotoFromPhotoAlbum.getRealPathFromUri(this, data.getData());
                 File file = new File(path);
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                Intent intent = new Intent(MainActivity.this, ImageProcessActivity.class);
                 intent.putExtra("IntentKey_ImgFile",file);
                 startActivity(intent);
             }

@@ -15,6 +15,7 @@ import com.liany.mytest3.image.model.PlottingStruct;
 import com.liany.mytest3.image.shape.DrawableShape;
 import com.liany.mytest3.image.shape.FreeLineShape;
 import com.liany.mytest3.image.shape.MeasureShape;
+import com.liany.mytest3.image.shape.RectangleShape;
 import com.liany.mytest3.image.shape.ScaleRuleShape;
 import com.liany.mytest3.image.shape.ShapeType;
 
@@ -313,6 +314,68 @@ public class MagnifierView extends AbstractPlottingImageView {
         @Override
         public void onHandlerMove(float x, float y) {
 
+        }
+    }
+
+    private class RectangleShapeTest extends RectangleShape {
+        public RectangleShapeTest(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onDelete() {
+
+        }
+
+        @Override
+        public void beforeDraw() {
+
+        }
+
+        @Override
+        public void onTransforming() {
+
+        }
+
+        @Override
+        public void afterDragDraw(DrawableShape shape) {
+
+        }
+
+        //@Override
+        //public void onPress(float x, float y) {
+        //
+        //}
+
+        @Override
+        public void onDoubleClick() {
+
+        }
+
+        //@Override
+        //public void onLongPress(float x, float y) {
+        //
+        //}
+
+        @Override
+        public void onPressHandler(float x, float y) {
+
+        }
+
+
+        @Override
+        public void onLongPressHandler(float x, float y) {
+
+        }
+
+        @Override
+        public void onHandlerMove(float x, float y) {
+
+        }
+
+        @Override
+        public float getPlottingScale() {
+            return mPlottingScalePixelLength / mPlottingScaleUnit;
         }
     }
 }

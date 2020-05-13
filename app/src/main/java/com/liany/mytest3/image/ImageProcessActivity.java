@@ -14,7 +14,6 @@ import com.liany.mytest3.image.model.AppBasic;
 import com.liany.mytest3.image.model.AppFootprint;
 
 import java.io.File;
-import java.io.Serializable;
 
 /**
  * @创建者 ly
@@ -24,7 +23,7 @@ import java.io.Serializable;
  * @更新时间 $
  * @更新描述
  */
-public class TestActivity extends BaseFragmentActivity implements IFootprintAnalyze{
+public class ImageProcessActivity extends BaseFragmentActivity implements IFootprintAnalyze{
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;

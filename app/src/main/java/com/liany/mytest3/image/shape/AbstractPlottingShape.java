@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import com.liany.mytest3.LogUtils;
 import com.liany.mytest3.image.model.PlottingRaw;
 import com.liany.mytest3.image.util.Kit;
 
@@ -372,6 +373,7 @@ public abstract class AbstractPlottingShape extends DrawableShape implements IEv
             if (mHandlerFllowScreen) {
                 //【屏幕手柄】绘制操作手柄(根据屏幕坐标系绘制，避免跟随视图缩放)
                 float[] screenCoord = screenCoord();
+                LogUtils.e("screenCoord:" + screenCoord[0] + "   " + screenCoord[1]);
                 canvas.drawCircle(screenCoord[0], screenCoord[1], mHandleSize, brush);
                 canvas.drawCircle(screenCoord[0], screenCoord[1], mHandleSize, borderBrush);
             } else {
@@ -391,7 +393,7 @@ public abstract class AbstractPlottingShape extends DrawableShape implements IEv
             //依据范围，判定包围盒是否覆盖（扩大灵敏度）只能判定矩形位于矩形内，或者矩形相等，无法使用
             //RectF rect = new RectF(x - RANGE, y - RANGE, x + RANGE, y + RANGE);
             //isHandle = this.bundingBox.contains(rect);
-
+            LogUtils.e("touchHandler:" + isHandle  + x + " " + y);
             return isHandle;
         }
 

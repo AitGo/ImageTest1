@@ -9,7 +9,8 @@ public enum ShapeType {
     PLOTTING_MIDDLE_WIDTH(13),
     PLOTTING_HEEL_WIDTH(14),
     PLOTTING_HARD_EDGE_LEN(15),
-    PLOTTING_STRESS_LEN(16);
+    PLOTTING_STRESS_LEN(16),
+    PLOTTING_STRESS_rectangle(17);
 
     private int type;
 

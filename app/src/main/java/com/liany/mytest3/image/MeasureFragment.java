@@ -28,15 +28,22 @@ import com.google.gson.Gson;
 import com.liany.mytest3.R;
 import com.liany.mytest3.image.model.AppBasic;
 import com.liany.mytest3.image.model.AppFootprint;
+import com.liany.mytest3.image.model.PlottingRaw;
 import com.liany.mytest3.image.model.PlottingStruct;
+import com.liany.mytest3.image.util.BitmapUtils;
 import com.liany.mytest3.image.util.Kit;
 import com.liany.mytest3.image.widget.ComplexImageView;
 import com.liany.mytest3.image.widget.MagnifierView;
 import com.liany.mytest3.image.widget.OvonicSeekBar;
+import com.liany.mytest3.image.widget.PlottingImageView;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 import com.warkiz.widget.TickMarkType;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,6 +127,7 @@ public class MeasureFragment extends Fragment {
     private final static int RULE_HARD_EDGE_LEN = 47;     //实边长
     private final static int RULE_STRESS_LEN = 48;     //重压面长
     private final static int RULE_TRASH = 49;       //移除测量线
+    private final static int RULE_Rectangle = 50;       //矩形框
 
     //Variables
     private int mButtonSize;
@@ -237,6 +245,7 @@ public class MeasureFragment extends Fragment {
         mMagnifierWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.magnifier_border));
     }
 
+    Bitmap bitmap;
     /**
      * 初始化预览图形
      */
@@ -249,7 +258,7 @@ public class MeasureFragment extends Fragment {
         String img = info.getImage();
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap bitmap = BitmapFactory.decodeFile(img, opts);
+        bitmap = BitmapFactory.decodeFile(img, opts);
         Glide.with(getActivity())
                 .load(bitmap)
                 .into(mComplexView);
@@ -345,9 +354,10 @@ public class MeasureFragment extends Fragment {
         makeOperateMenu(ctx);
         /*非预览模式下，可构造测量子菜单按钮组*/
         IFootprintAnalyze activity = (IFootprintAnalyze) getActivity();
-        if (!activity.isMode(IFootprintAnalyze.MODE_VIEW)) {
-            makePlottingMenu(ctx);
-        }
+//        if (!activity.isMode(IFootprintAnalyze.MODE_VIEW)) {
+//            makePlottingMenu(ctx);
+//        }
+        makePlottingMenu(ctx);
 
         /*默认在主工具栏加载主按钮*/
         mainToolbarSwitch(mMainMenu);
@@ -382,15 +392,15 @@ public class MeasureFragment extends Fragment {
             initComplexView();
         });
 
-//        RadioButton adjustBtn = new RadioButton(ctx);
-//        adjustBtn.setId(MENU_ADJUST);
-//        adjustBtn.setBackground(ctx.getDrawable(R.drawable.radio_btn_adjust));
-//        adjustBtn.setButtonDrawable(null);
-//
-//        RadioButton effectBtn = new RadioButton(ctx);
-//        effectBtn.setId(MENU_EFFECT);
-//        effectBtn.setBackground(ctx.getDrawable(R.drawable.radio_btn_effect));
-//        effectBtn.setButtonDrawable(null);
+        RadioButton adjustBtn = new RadioButton(ctx);
+        adjustBtn.setId(MENU_ADJUST);
+        adjustBtn.setBackground(ctx.getDrawable(R.drawable.radio_btn_adjust));
+        adjustBtn.setButtonDrawable(null);
+
+        RadioButton effectBtn = new RadioButton(ctx);
+        effectBtn.setId(MENU_EFFECT);
+        effectBtn.setBackground(ctx.getDrawable(R.drawable.radio_btn_effect));
+        effectBtn.setButtonDrawable(null);
 
         RadioButton operateBtn = new RadioButton(ctx);
         operateBtn.setId(MENU_OPERATE);
@@ -403,8 +413,8 @@ public class MeasureFragment extends Fragment {
         ruletBtn.setButtonDrawable(null);
 
         mMainMenu.addView(reloadBtn, lp);
-//        mMainMenu.addView(adjustBtn, lp);
-//        mMainMenu.addView(effectBtn, lp);
+        mMainMenu.addView(adjustBtn, lp);
+        mMainMenu.addView(effectBtn, lp);
         mMainMenu.addView(operateBtn, lp);
 
         //非预览模式下，可以绘制测量线
@@ -415,12 +425,12 @@ public class MeasureFragment extends Fragment {
 
         mMainMenu.setOnCheckedChangeListener((group, id) -> {
             switch (id) {
-//                case MENU_ADJUST:
-//                    subToolbarSwitch(mAdjustMenu);
-//                    break;
-//                case MENU_EFFECT:
-//                    subToolbarSwitch(mEffectMenu);
-//                    break;
+                case MENU_ADJUST:
+                    subToolbarSwitch(mAdjustMenu);
+                    break;
+                case MENU_EFFECT:
+                    subToolbarSwitch(mEffectMenu);
+                    break;
                 case MENU_OPERATE:
                     subToolbarSwitch(mOperateMenu);
                     break;
@@ -828,40 +838,41 @@ public class MeasureFragment extends Fragment {
         scale.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
         scale.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_scale_rule));
 
-//        RadioButton free = new RadioButton(ctx);
+        RadioButton free = new RadioButton(ctx);
 //        free.setId(RULE_LINE_FREE);
-//        free.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        free.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_free_line));
-//
-//        RadioButton frontWidth = new RadioButton(ctx);
-//        frontWidth.setId(RULE_LINE_FRONT_WIDTH);
-//        frontWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        frontWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_front_width));
-//
-//        RadioButton midWidth = new RadioButton(ctx);
-//        midWidth.setId(RULE_LINE_MID_WIDTH);
-//        midWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        midWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_mid_width));
-//
-//        RadioButton heelWidth = new RadioButton(ctx);
-//        heelWidth.setId(RULE_LINE_HEEL_WIDTH);
-//        heelWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        heelWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_heel_width));
-//
-//        RadioButton footLen = new RadioButton(ctx);
-//        footLen.setId(RULE_LINE_FOOT_LEN);
-//        footLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        footLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_foot_len));
-//
-//        RadioButton hardEdgeLen = new RadioButton(ctx);
-//        hardEdgeLen.setId(RULE_HARD_EDGE_LEN);
-//        hardEdgeLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        hardEdgeLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_hard_edge_len));
-//
-//        RadioButton stressLen = new RadioButton(ctx);
-//        stressLen.setId(RULE_STRESS_LEN);
-//        stressLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
-//        stressLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_stress_len));
+        free.setId(RULE_Rectangle);
+        free.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        free.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_free_line));
+
+        RadioButton frontWidth = new RadioButton(ctx);
+        frontWidth.setId(RULE_LINE_FRONT_WIDTH);
+        frontWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        frontWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_front_width));
+
+        RadioButton midWidth = new RadioButton(ctx);
+        midWidth.setId(RULE_LINE_MID_WIDTH);
+        midWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        midWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_mid_width));
+
+        RadioButton heelWidth = new RadioButton(ctx);
+        heelWidth.setId(RULE_LINE_HEEL_WIDTH);
+        heelWidth.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        heelWidth.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_heel_width));
+
+        RadioButton footLen = new RadioButton(ctx);
+        footLen.setId(RULE_LINE_FOOT_LEN);
+        footLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        footLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_foot_len));
+
+        RadioButton hardEdgeLen = new RadioButton(ctx);
+        hardEdgeLen.setId(RULE_HARD_EDGE_LEN);
+        hardEdgeLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        hardEdgeLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_hard_edge_len));
+
+        RadioButton stressLen = new RadioButton(ctx);
+        stressLen.setId(RULE_STRESS_LEN);
+        stressLen.setBackground(ctx.getDrawable(R.drawable.radio_btn_sub));
+        stressLen.setButtonDrawable(ctx.getDrawable(R.drawable.ic_plotting_stress_len));
 
         ImageButton trash = new ImageButton(ctx);
         trash.setId(RULE_TRASH);
@@ -872,13 +883,13 @@ public class MeasureFragment extends Fragment {
         });
 
         mPlottingMenu.addView(scale, layoutParams);
-//        mPlottingMenu.addView(free, layoutParams);
-//        mPlottingMenu.addView(frontWidth, layoutParams);
-//        mPlottingMenu.addView(midWidth, layoutParams);
-//        mPlottingMenu.addView(heelWidth, layoutParams);
-//        mPlottingMenu.addView(footLen, layoutParams);
-//        mPlottingMenu.addView(hardEdgeLen, layoutParams);
-//        mPlottingMenu.addView(stressLen, layoutParams);
+        mPlottingMenu.addView(free, layoutParams);
+        mPlottingMenu.addView(frontWidth, layoutParams);
+        mPlottingMenu.addView(midWidth, layoutParams);
+        mPlottingMenu.addView(heelWidth, layoutParams);
+        mPlottingMenu.addView(footLen, layoutParams);
+        mPlottingMenu.addView(hardEdgeLen, layoutParams);
+        mPlottingMenu.addView(stressLen, layoutParams);
         mPlottingMenu.addView(trash, layoutParams);
 
         //2018/7/16 监听按钮变化
@@ -890,41 +901,44 @@ public class MeasureFragment extends Fragment {
                         mComplexView.drawPlottingScale();
                     }
                     break;
-//                case RULE_LINE_FREE:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawFreeLine();
-//                    }
-//                    break;
-//                case RULE_LINE_FOOT_LEN:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawFootLengthLine();
-//                    }
-//                    break;
-//                case RULE_LINE_FRONT_WIDTH:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawFrontWidthLine();
-//                    }
-//                    break;
-//                case RULE_LINE_MID_WIDTH:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawMiddleWidthLine();
-//                    }
-//                    break;
-//                case RULE_LINE_HEEL_WIDTH:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawHeelWidthLine();
-//                    }
-//                    break;
-//                case RULE_HARD_EDGE_LEN:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawHardEdgeLengthLine();
-//                    }
-//                    break;
-//                case RULE_STRESS_LEN:
-//                    if (((RadioButton) group.findViewById(id)).isChecked()) {
-//                        mComplexView.drawStressLengthLine();
-//                    }
-//                    break;
+                case RULE_LINE_FREE:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawFreeLine();
+                    }
+                    break;
+                case RULE_LINE_FOOT_LEN:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawFootLengthLine();
+                    }
+                    break;
+                case RULE_LINE_FRONT_WIDTH:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawFrontWidthLine();
+                    }
+                    break;
+                case RULE_LINE_MID_WIDTH:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawMiddleWidthLine();
+                    }
+                    break;
+                case RULE_LINE_HEEL_WIDTH:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawHeelWidthLine();
+                    }
+                    break;
+                case RULE_HARD_EDGE_LEN:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawHardEdgeLengthLine();
+                    }
+                    break;
+                case RULE_STRESS_LEN:
+                    if (((RadioButton) group.findViewById(id)).isChecked()) {
+                        mComplexView.drawStressLengthLine();
+                    }
+                    break;
+                case RULE_Rectangle:
+                    mComplexView.drawRectangle();
+                    break;
             }
         });
 
@@ -933,26 +947,26 @@ public class MeasureFragment extends Fragment {
             public void onViewAttachedToWindow(View v) {
                 //Log.d(TAG, "onViewAttachedToWindow: 加载控件");
                 scale.setEnabled(false);
-//                free.setEnabled(false);
-//                footLen.setEnabled(false);
-//                frontWidth.setEnabled(false);
-//                midWidth.setEnabled(false);
-//                heelWidth.setEnabled(false);
-//                hardEdgeLen.setEnabled(false);
-//                stressLen.setEnabled(false);
+                free.setEnabled(false);
+                footLen.setEnabled(false);
+                frontWidth.setEnabled(false);
+                midWidth.setEnabled(false);
+                heelWidth.setEnabled(false);
+                hardEdgeLen.setEnabled(false);
+                stressLen.setEnabled(false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
                 //Log.d(TAG, "onViewDetachedFromWindow: 移除控件");
                 scale.setEnabled(true);
-//                free.setEnabled(true);
-//                footLen.setEnabled(true);
-//                frontWidth.setEnabled(true);
-//                midWidth.setEnabled(true);
-//                heelWidth.setEnabled(true);
-//                hardEdgeLen.setEnabled(true);
-//                stressLen.setEnabled(true);
+                free.setEnabled(true);
+                footLen.setEnabled(true);
+                frontWidth.setEnabled(true);
+                midWidth.setEnabled(true);
+                heelWidth.setEnabled(true);
+                hardEdgeLen.setEnabled(true);
+                stressLen.setEnabled(true);
             }
         });
     }
@@ -1090,45 +1104,74 @@ public class MeasureFragment extends Fragment {
      * 保存测绘线结构
      */
     private void saveDrawingState() {
+        //截取矩形框图像
+        List<PlottingRaw> plottingDatas = mComplexView.getPlottingStruct().getPlottingDatas();
+        float x2 = plottingDatas.get(0).getX2();
+        float y2 = plottingDatas.get(0).getY2();
+        float length = 0f;
+        if(x2 == 0.0f) {
+            if(y2 < 0) {
+                y2 = y2 * -1;
+            }
+            length = y2;
+        }else {
+            if(x2 < 0) {
+                x2 = x2 * -1;
+            }
+            length = x2;
+        }
+        int scale = mComplexView.getPlottingScaleUnit();
+        double value = 0f;
+        if(scale != 0f) {
+            value = length/scale * 2.6;
+        }
+        BigDecimal decimal = new BigDecimal(value);
+        int value1 = decimal.setScale(2, BigDecimal.ROUND_HALF_UP).intValue();
+        Bitmap bitmap = BitmapUtils.imageCrop2(this.bitmap, Math.round(plottingDatas.get(1).getPx())-value1/2, Math.round(plottingDatas.get(1).getPy())-value1/2, value1);
+        File file = new File("/sdcard/newcsi/photo/" + System.currentTimeMillis() + ".png");
+        BitmapUtils.saveBitmapAsPng(bitmap,file);
+        BitmapUtils.save8BitBmp(        BitmapFactory.decodeFile(file.getAbsolutePath())
+                ,"/sdcard/newcsi/photo/" + System.currentTimeMillis() + ".bmp");
+//    getReferencePosition
         //返回测量线数据
-        IFootprintAnalyze activity = (IFootprintAnalyze) getActivity();
-        AppBasic appBasic = activity.getAppBasic();
-        String lastState = appBasic.getDrawings();
-
-        /**
-         * 对于足长、前掌宽、中腰宽、后跟宽，测量线删除后不影响UI中已经填入的值
-         */
-        if (mComplexView.getFootLength() != 0) {
-            appBasic.setFootLength(mComplexView.getFootLength());
-        }
-
-        if (mComplexView.getFrontWidth() != 0) {
-            appBasic.setFrontWidth(mComplexView.getFrontWidth());
-        }
-
-        if (mComplexView.getMiddleWidth() != 0) {
-            appBasic.setMiddleWidth(mComplexView.getMiddleWidth());
-        }
-
-        if (mComplexView.getHeelWidth() != 0) {
-            appBasic.setHeelWidth(mComplexView.getHeelWidth());
-        }
-
-        /**
-         * 对于实边长、重压面长，测量线是否存在，会影响UI中的显示
-         */
-        appBasic.setHardEdgeLength(mComplexView.getHardEdgeLength());
-        appBasic.setStressLength(mComplexView.getStressLength());
-
-        //构造测量线存储数据结构
-        PlottingStruct struct = mComplexView.getPlottingStruct();
-        Gson gson = new Gson();
-        String json = gson.toJson(struct, PlottingStruct.class);
-        appBasic.setDrawings(json);
-
-        if (!json.equals(lastState)) {
-            appBasic.setChanged(true);
-        }
+//        IFootprintAnalyze activity = (IFootprintAnalyze) getActivity();
+//        AppBasic appBasic = activity.getAppBasic();
+//        String lastState = appBasic.getDrawings();
+//
+//        /**
+//         * 对于足长、前掌宽、中腰宽、后跟宽，测量线删除后不影响UI中已经填入的值
+//         */
+//        if (mComplexView.getFootLength() != 0) {
+//            appBasic.setFootLength(mComplexView.getFootLength());
+//        }
+//
+//        if (mComplexView.getFrontWidth() != 0) {
+//            appBasic.setFrontWidth(mComplexView.getFrontWidth());
+//        }
+//
+//        if (mComplexView.getMiddleWidth() != 0) {
+//            appBasic.setMiddleWidth(mComplexView.getMiddleWidth());
+//        }
+//
+//        if (mComplexView.getHeelWidth() != 0) {
+//            appBasic.setHeelWidth(mComplexView.getHeelWidth());
+//        }
+//
+//        /**
+//         * 对于实边长、重压面长，测量线是否存在，会影响UI中的显示
+//         */
+//        appBasic.setHardEdgeLength(mComplexView.getHardEdgeLength());
+//        appBasic.setStressLength(mComplexView.getStressLength());
+//
+//        //构造测量线存储数据结构
+//        PlottingStruct struct = mComplexView.getPlottingStruct();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(struct, PlottingStruct.class);
+//        appBasic.setDrawings(json);
+//
+//        if (!json.equals(lastState)) {
+//            appBasic.setChanged(true);
+//        }
     }
 
     public void setMeasureViewCallback(MeasureViewCallback measureViewCallback) {

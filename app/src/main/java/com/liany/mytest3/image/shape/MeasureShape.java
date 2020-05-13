@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 
 
+import com.liany.mytest3.LogUtils;
 import com.liany.mytest3.R;
 import com.liany.mytest3.image.util.Kit;
 
@@ -72,7 +73,6 @@ public abstract class MeasureShape extends AbstractPlottingShape implements INee
         if (scale != 0f) {
             value = (mLength / getPlottingScale());
         }
-
         BigDecimal decimal = new BigDecimal(value);
         return decimal.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
     }

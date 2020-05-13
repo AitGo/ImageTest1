@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.liany.mytest3.LogUtils;
 import com.liany.mytest3.R;
 import com.liany.mytest3.image.util.Kit;
 
@@ -132,7 +133,6 @@ public abstract class ScaleRuleShape extends AbstractPlottingShape {
         float x2 = mEndPoint.x;
         float y2 = mEndPoint.y;
         float segLen = Math.abs(x2 - x1) / 5;
-
         RectF r1 = new RectF(x1 + segLen * 0, y1 - mPathSize / 2, x1 + segLen, y2 + mPathSize / 2);
         RectF r2 = new RectF(x1 + segLen * 1, y1 - mPathSize / 2, x1 + segLen * 2, y2 + mPathSize / 2);
         RectF r3 = new RectF(x1 + segLen * 2, y1 - mPathSize / 2, x1 + segLen * 3, y2 + mPathSize / 2);
