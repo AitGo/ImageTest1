@@ -1111,8 +1111,13 @@ public class MeasureFragment extends Fragment {
         int y1 = 0;
         for(PlottingRaw raw : plottingDatas) {
             if(raw.getType() == 0) {
-                x2 = raw.getX1();
-                y2 = raw.getY1();
+                if(raw.getX1() == 0 && raw.getY1() == 0) {
+                    x2 = raw.getX2();
+                    y2 = raw.getY2();
+                }else {
+                    x2 = raw.getX1();
+                    y2 = raw.getY1();
+                }
                 if(x2 < 0) {
                     x2 = x2 * -1;
                 }
@@ -1126,14 +1131,8 @@ public class MeasureFragment extends Fragment {
         }
         float length = 0f;
         if(x2 == 0.0f) {
-            if(y2 < 0) {
-                y2 = y2 * -1;
-            }
             length = y2;
         }else {
-            if(x2 < 0) {
-                x2 = x2 * -1;
-            }
             length = x2;
         }
         int scale = mComplexView.getPlottingScaleUnit();
