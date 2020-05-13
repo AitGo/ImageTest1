@@ -1106,8 +1106,24 @@ public class MeasureFragment extends Fragment {
     private void saveDrawingState() {
         //截取矩形框图像
         List<PlottingRaw> plottingDatas = mComplexView.getPlottingStruct().getPlottingDatas();
-        float x2 = plottingDatas.get(0).getX2();
-        float y2 = plottingDatas.get(0).getY2();
+        float x2 = 0f,y2 = 0f;
+        int x1 = 0;
+        int y1 = 0;
+        for(PlottingRaw raw : plottingDatas) {
+            if(raw.getType() == 0) {
+                x2 = raw.getX1();
+                y2 = raw.getY1();
+                if(x2 < 0) {
+                    x2 = x2 * -1;
+                }
+                if(y2 < 0) {
+                    y2 = y2 * -1;
+                }
+            }else if(raw.getType() == 17) {
+                x1 = Math.round(raw.getPx());
+                y1 = Math.round(raw.getPy());
+            }
+        }
         float length = 0f;
         if(x2 == 0.0f) {
             if(y2 < 0) {
@@ -1127,10 +1143,11 @@ public class MeasureFragment extends Fragment {
         }
         BigDecimal decimal = new BigDecimal(value);
         int value1 = decimal.setScale(2, BigDecimal.ROUND_HALF_UP).intValue();
-        Bitmap bitmap = BitmapUtils.imageCrop2(this.bitmap, Math.round(plottingDatas.get(1).getPx())-value1/2, Math.round(plottingDatas.get(1).getPy())-value1/2, value1);
+        Bitmap bitmap = BitmapUtils.imageCrop2(this.bitmap, x1 - (value1/2), y1 - (value1/2), value1);
+        bitmap = BitmapUtils.imageScale(bitmap,512,512);
         File file = new File("/sdcard/newcsi/photo/" + System.currentTimeMillis() + ".png");
         BitmapUtils.saveBitmapAsPng(bitmap,file);
-        BitmapUtils.save8BitBmp(        BitmapFactory.decodeFile(file.getAbsolutePath())
+        BitmapUtils.save8BitBmp(BitmapFactory.decodeFile(file.getAbsolutePath())
                 ,"/sdcard/newcsi/photo/" + System.currentTimeMillis() + ".bmp");
 //    getReferencePosition
         //返回测量线数据
